@@ -17,10 +17,9 @@ interface Ad {
 }
 
 interface MoreScreenProps {
-  user: any;
 }
 
-function MoreScreen({ user }: MoreScreenProps) {
+function MoreScreen({}: MoreScreenProps) {
   const [liveUpdates, setLiveUpdates] = useState<LiveUpdate[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [categoryAds, setCategoryAds] = useState<Ad[]>([]);
