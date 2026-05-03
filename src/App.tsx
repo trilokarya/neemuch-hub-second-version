@@ -42,63 +42,61 @@ function App() {
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage('');
+  e.preventDefault()
+  setLoading(true)
+  setMessage('')
 
-    if (!loginInput.trim()) {
-      setMessage('Please enter Email or Mobile Number');
-      setLoading(false);
-      return;
+  if (!loginInput.trim()) {
+    setMessage('Please enter Email or Mobile Number')
+    setLoading(false)
+    return
+  }
+
+  const isEmail = loginInput.includes('@')
+  
+  let query = supabase.from('users').select('*')
+  
+  if (isEmail) {
+    query = query.eq('email', loginInput.trim())
+  } else {
+    query = query.eq('mobile', loginInput.trim())
+  }
+
+  const { data: existingUser } = await query.maybeSingle()
+
+  if (existingUser) {
+    setUser(existingUser)
+    localStorage.setItem('nimach_user', JSON.stringify(existingUser))
+    setMessage(`Welcome back ${existingUser.name}!`)
+  } else {
+    const newUserData: any = { 
+      name: name.trim(), 
+      role: 'user' 
     }
-
-    const isEmail = loginInput.includes('@');
-
-    let query = supabase.from('users').select('*');
-
+    
     if (isEmail) {
-      query = query.eq('email', loginInput.trim());
+      newUserData.email = loginInput.trim()
     } else {
-      query = query.eq('mobile', loginInput.trim());
+      newUserData.mobile = loginInput.trim()
     }
+    
+    const { data: newUser, error: insertError } = await supabase
+      .from('users')
+      .insert([newUserData])
+      .select()
+      .single()
 
-    const { data: existingUser } = await query.maybeSingle();
-
-    if (existingUser) {
-      // User exists - login and save to localStorage
-      setUser(existingUser);
-      localStorage.setItem('nimach_user', JSON.stringify(existingUser));
-      setMessage(`Welcome back ${existingUser.name}!`);
+    if (newUser) {
+      setUser(newUser)
+      localStorage.setItem('nimach_user', JSON.stringify(newUser))
+      setMessage(`Welcome ${name.trim()}! Account created.`)
     } else {
-      // New user - register
-      const newUserData: any = {
-        name: name.trim(),
-        role: 'user',
-      };
-
-      if (isEmail) {
-        newUserData.email = loginInput.trim();
-      } else {
-        newUserData.mobile = loginInput.trim();
-      }
-
-      const { data: newUser } = await supabase
-        .from('users')
-        .insert([newUserData])
-        .select()
-        .single();
-
-      if (newUser) {
-        setUser(newUser);
-        localStorage.setItem('nimach_user', JSON.stringify(newUser));
-        setMessage(`Welcome ${name.trim()}! Account created.`);
-      } else {
-        setMessage('Error: ' + insertError?.message);
-      }
+      setMessage('Error creating account: ' + (insertError?.message || 'Unknown error'))
     }
+  }
 
-    setLoading(false);
-  };
+  setLoading(false)
+}
 
   const handleLogout = () => {
     setUser(null);
