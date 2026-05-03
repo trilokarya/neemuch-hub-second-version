@@ -371,7 +371,7 @@ function Home({ user, onLogout }: HomeProps) {
           </div>
         )}
 
-        {activeTab === 'more' && <MoreScreen user={user} />}
+        {activeTab === 'more' && <MoreScreen/>}
 
         {activeTab === 'saved' && (
           <div>
