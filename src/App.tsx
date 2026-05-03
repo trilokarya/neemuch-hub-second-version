@@ -62,7 +62,7 @@ function App() {
       query = query.eq('mobile', loginInput.trim());
     }
 
-    const { data: existingUser, error: fetchError } = await query.maybeSingle();
+    const { data: existingUser } = await query.maybeSingle();
 
     if (existingUser) {
       // User exists - login and save to localStorage
@@ -82,7 +82,7 @@ function App() {
         newUserData.mobile = loginInput.trim();
       }
 
-      const { data: newUser, error: insertError } = await supabase
+      const { data: newUser } = await supabase
         .from('users')
         .insert([newUserData])
         .select()
