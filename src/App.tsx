@@ -18,7 +18,7 @@ function App() {
         try {
           const parsedUser = JSON.parse(savedUser);
           // Verify user still exists in database
-          const { data, error } = await supabase
+          const { data } = await supabase
             .from('users')
             .select('*')
             .eq('id', parsedUser.id)
