@@ -259,6 +259,9 @@ function Home({ user, onLogout }: HomeProps) {
             {refreshing ? '⏳' : '🔄'}
           </button>
         )}
+          {activeTab !== 'home' && (
+    <div style={{ width: '40px' }}></div> /* Placeholder to balance layout */
+  )}
       </div>
 
       <div style={{ marginBottom: '70px' }}>
