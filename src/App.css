@@ -147,6 +147,10 @@ iframe {
 /* TOP BAR - SOFT THEME
 /* ============================================ */
 
+/* ============================================ */
+/* TOP BAR - FIXED POSITIONING
+/* ============================================ */
+
 .top-bar {
   background: #ffffff;
   display: flex;
@@ -158,16 +162,21 @@ iframe {
   z-index: 100;
   border-bottom: 1px solid #e2e8f0;
   width: 100%;
+  min-height: 60px;
 }
 
 .app-title {
   cursor: pointer;
+  flex: 1;
+  display: flex;
+  align-items: center;
 }
 
 .logo-text {
   font-size: 18px;
   font-weight: 800;
   color: #ef4444;
+  letter-spacing: -0.3px;
 }
 
 .refresh-btn {
@@ -183,12 +192,18 @@ iframe {
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
+  flex-shrink: 0;
 }
 
-.refresh-btn:hover {
+.refresh-btn:active {
+  transform: scale(0.95);
   background: #e2e8f0;
 }
 
+.refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 /* ============================================ */
 /* ARTICLE CARD - SOFT THEME & RESPONSIVE
 /* ============================================ */
